@@ -1,0 +1,195 @@
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
+
+/* ВИПРАВЛЕНО: прибрано z-index, що перекривав кнопки зуму */
+#map { 
+    height: 100vh; 
+    width: 100vw; 
+    background: #1a1a1a; 
+}
+
+/* Стиль для пунктиру, щоб він не зливався */
+.target-beam {
+    pointer-events: none;
+}
+
+/* ПАНЕЛЬ ПК */
+.controls {
+    position: absolute; top: 20px; left: 20px; z-index: 1000;
+    background: white; padding: 15px; border-radius: 12px; width: 160px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+/* НОВА ПЛАШКА ПІДРАХУНКУ (Додано сюди) */
+.stats-badge {
+    position: absolute; 
+    top: 20px; 
+    left: 200px; /* Розташування праворуч від основної панелі */
+    z-index: 1100;
+    background: rgba(0, 0, 0, 0.7); /* Чорний напівпрозорий фон як на референсі */
+    color: white; 
+    padding: 8px 15px; 
+    border-radius: 10px; 
+    font-size: 14px; 
+    /* font-weight: bold; <--- ВИДАЛИ АБО ЗАКОМЕНТУЙ ЦЕЙ РЯДОК */
+    pointer-events: none; /* Щоб плашка не заважала натискати на карту */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    white-space: nowrap;
+}
+
+.buttons-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.buttons-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+.tool-btn { padding: 10px; cursor: pointer; border: 1px solid #ddd; background: #f9f9f9; border-radius: 8px; }
+.tool-btn.active { background: #007aff; color: white; border-color: #005bb5; }
+
+/* МОБІЛЬНА ПАНЕЛЬ — ОНОВЛЕНО (КОМПАКТНА) */
+.mobile-controls { 
+    position: fixed; 
+    bottom: 20px; 
+    left: 10px; 
+    right: 10px; 
+    z-index: 1000; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+}
+
+/* Сама плашка з іконками: робимо її низькою */
+.mobile-buttons { 
+    background: rgba(255, 255, 255, 0.9); 
+    backdrop-filter: blur(10px);
+    padding: 0 10px;        /* Прибрали вертикальні відступи */
+    height: 44px;           /* Фіксована низька висота */
+    border-radius: 15px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;    /* Центруємо іконки по вертикалі */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
+}
+
+/* Самі кнопки всередині плашки */
+.mobile-buttons button { 
+    flex: 1; 
+    font-size: 20px;        /* Трохи менші іконки */
+    border: none; 
+    background: none; 
+    padding: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobile-buttons .active { background: #e3f2fd; border-radius: 10px; }
+
+/* Панель з повзунками, що вискакує над кнопками */
+.mob-course-popup { 
+    background: white; 
+    padding: 10px 12px;     /* Трохи компактніше */
+    border-radius: 15px; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+}
+
+#heading-slider, #heading-slider-mob { width: 100%; }
+
+/* ІКОНКИ */
+.rotated-icon { transition: transform 0.1s linear; font-size: 24px; display: flex; align-items: center; justify-content: center; }
+.delete-btn { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; width: 100%; padding: 5px; margin-top: 10px; border-radius: 5px; }
+
+/* АДАПТИВНІСТЬ */
+@media (min-width: 768px) { .mobile-only { display: none !important; } }
+@media (max-width: 767px) { .pc-only { display: none !important; } }
+
+/* Стилі для мобільної версії статистики */
+@media (max-width: 767px) {
+    .stats-badge {
+        left: 50%;
+        transform: translateX(-50%);
+        top: 10px;
+        
+        /* ОСЬ ТУТ ГОЛОВНІ ЗМІНИ */
+        width: max-content;    /* Стискатися під розмір тексту */
+        max-width: 90%;        /* Але не ширше ніж 90% екрану */
+        min-width: 120px;      /* Щоб не була занадто маленькою */
+        
+        white-space: nowrap;  /* Дозволяємо перенос, якщо тексту дуже багато */
+        text-align: center;
+        font-size: 12px;
+        padding: 6px 15px;
+        line-height: 1.4;
+        display: block;        /* Гарантуємо правильне центрування */
+    }
+}
+
+/* --- ПЛАШКА КОПІРАЙТУ (ФІНАЛЬНА ВЕРСІЯ ЗА РЕФЕРЕНСОМ) --- */
+.custom-copyright {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    background-color: rgba(255, 255, 255, 0.7);
+    color: #444;
+    padding: 1px 4px; /* Ще менші відступи */
+    font-size: 9px;    /* Екстремально дрібний шрифт */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1;    /* Прибираємо висоту рядка */
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.2px; /* Зближуємо літери */
+}
+
+.custom-copyright .ua-flag {
+    font-size: 10px;
+    margin-right: 3px;
+    line-height: 1;
+}
+
+.custom-copyright .separator {
+    margin: 0 2px;
+    color: #888;
+    font-size: 9px;
+    display: inline-block;
+}
+
+.custom-copyright .copy-text {
+    margin-right: 2px; /* Відступ від © до Google */
+    display: inline-block;
+}
+
+.custom-copyright a {
+    color: #0078A8 !important;
+    text-decoration: none !important;
+}
+
+.custom-copyright a:hover {
+    text-decoration: underline !important;
+}
+
+
+/* ВОТЕРМАРКА (НЕЗМІННА СІТКА) */
+.watermark-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 500; /* Лежить над картою, але під кнопками інтерфейсу */
+    pointer-events: none; /* Крізь цей шар можна клікати на карту */
+    opacity: 0.10; /* Налаштуй видимість під себе (0.1 - блідо, 0.3 - яскраво) */
+    
+    /* Створюємо патерн за допомогою SVG */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='120'><text x='50%' y='50%' font-size='26' font-family='Arial' fill='black' text-anchor='middle' transform='rotate(-30, 125, 125)'>kamianske_nebo</text></svg>");
+    background-repeat: repeat;
+}
+
+/* Опускаємо кнопки + / - нижче, щоб не заважали статистиці */
+.leaflet-top.leaflet-left {
+    top: 80px !important; /* Було за замовчуванням ~10px, ставимо 80px */
+}
+
+/* Для мобілок можна опустити ще нижче, якщо треба */
+@media (max-width: 767px) {
+    .leaflet-top.leaflet-left {
+        top: 100px !important;
+    }
+}
