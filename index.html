@@ -59,23 +59,26 @@
 
 <div class="mobile-controls mobile-only">
     <div id="course-panel-mob" class="mob-course-popup" style="display: none;">
-        <div style="display: flex; flex-direction: column; flex: 1; gap: 5px;">
-            <span class="mob-angle">
-                🧭 <span id="angle-val-mob">0</span>° | 📏 <span id="dist-val-mob">1</span> км
-            </span>
+        <div style="display: flex; flex-direction: column; flex: 1; gap: 10px;">
             
-            <input type="range" id="heading-slider-mob" min="0" max="360" value="0" style="width: 100%;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="min-width: 60px; font-size: 13px; white-space: nowrap;">🧭 <span id="angle-val-mob">0</span>°</span>
+                <input type="range" id="heading-slider-mob" min="0" max="360" value="0" style="flex: 1;">
+            </div>
             
-            <input type="range" id="dist-slider-mob" min="0" max="150" value="1" step="1" style="width: 100%;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="min-width: 60px; font-size: 13px; white-space: nowrap;">📏 <span id="dist-val-mob">1</span> км</span>
+                <input type="range" id="dist-slider-mob" min="0" max="150" value="1" step="1" style="flex: 1;">
+            </div>
         </div>
         
-        <div class="lock-wrapper-mob" style="display: flex; align-items: center; margin: 0 5px;">
-            <input type="checkbox" id="lock-angle-mob" style="width: 26px; height: 26px;">
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+             <div class="lock-wrapper-mob" style="display: flex; align-items: center; justify-content: center;">
+                <input type="checkbox" id="lock-angle-mob" style="width: 24px; height: 24px;">
+            </div>
+            <button class="delete-btn-mob" onclick="deleteSelected()" style="background:none; border:none; font-size: 20px;">❌</button>
         </div>
-        <button class="delete-btn-mob" onclick="deleteSelected()">❌</button>
-    </div>
-    
-    <div class="mobile-buttons">
+    </div> <div class="mobile-buttons">
         <button class="tool-btn" data-tool="shahed">🛸</button>
         <button class="tool-btn" data-tool="raketa">🚀</button>
         <button class="tool-btn" data-tool="rozvid">🕵️‍♂️</button>
