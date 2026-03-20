@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<div id="map"></div>
+
+<div class="watermark-overlay"></div>
+
+<div id="stats-badge" class="stats-badge">Всього: 0 цілей</div>
+
+<div class="custom-copyright">
+  <span class="ua-flag">🇺🇦</span>
+  <a href="https://leafletjs.com" target="_blank">Leaflet</a>
+  <span class="separator">|</span>
+ <span class="copy-text">©&nbsp;</span>
+  <a href="https://www.google.com/maps" target="_blank">Google Maps</a>
+</div>
+
+<div class="controls pc-only">
+    <div class="title">Цілі</div>
+    <div class="buttons-grid">
+        <button class="tool-btn" data-tool="shahed">🛸 БпЛА</button>
+        <button class="tool-btn" data-tool="raketa">🚀 Ракета</button>
+        <button class="tool-btn" data-tool="rozvid">🕵️‍♂️ Розвідник</button>
+    </div>
+    
+    <div id="course-panel" style="display: none;">
+        <hr>
+        <div class="angle-label">Курс: <span id="angle-val">0</span>°</div>
+        <input type="range" id="heading-slider" min="0" max="360" value="0">
+        
+        <div class="dist-label" style="margin-top: 10px;">Дальність: <span id="dist-val">9</span> км</div>
+        <input type="range" id="dist-slider" min="1" max="150" value="9" step="1" style="width: 100%;">
+        
+        <div class="lock-wrapper">
+            <input type="checkbox" id="lock-angle"> <span>Закріпити курс</span>
+        </div>
+        <button class="delete-btn" onclick="deleteSelected()">Видалити</button>
+    </div>
+    <hr>
+    <button class="clear-all" onclick="clearAll()">Очистити все</button>
+</div>
+
+<div class="mobile-controls mobile-only">
+    <div id="course-panel-mob" class="mob-course-popup" style="display: none;">
+        <div style="display: flex; flex-direction: column; flex: 1; gap: 5px;">
+            <span class="mob-angle">🧭 <span id="angle-val-mob">0</span>° | 📏 <span id="dist-val-mob">9</span> км</span>
+            <input type="range" id="heading-slider-mob" min="0" max="360" value="0">
+            <input type="range" id="dist-slider-mob" min="1" max="150" value="9" step="1">
+        </div>
+        <div class="lock-wrapper-mob" style="display: flex; align-items: center; margin: 0 5px;">
+            <input type="checkbox" id="lock-angle-mob" style="width: 22px; height: 22px;">
+        </div>
+        <button class="delete-btn-mob" onclick="deleteSelected()">❌</button>
+    </div>
+    
+    <div class="mobile-buttons">
+        <button class="tool-btn" data-tool="shahed">🛸</button>
+        <button class="tool-btn" data-tool="raketa">🚀</button>
+        <button class="tool-btn" data-tool="rozvid">🕵️‍♂️</button>
+        <button class="clear-all-mob" onclick="clearAll()">🗑️</button>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
