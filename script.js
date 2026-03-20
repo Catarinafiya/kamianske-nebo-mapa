@@ -32,6 +32,7 @@ const map = L.map('map', {
     zoom: 8,
     layers: [googleMaps], 
     zoomControl: true
+    attributionControl: false // <--- ЦЕ ВИМКНЕ ЗАЙВИЙ СИНІЙ НАПИС
 });
 
 
