@@ -182,39 +182,62 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
     background-repeat: repeat;
 }
 
-/* Опускаємо кнопки + / - нижче, щоб не заважали статистиці */
-.leaflet-top.leaflet-left {
-    top: 80px !important; /* Було за замовчуванням ~10px, ставимо 80px */
+/* ПЕРЕНОСИМО КНОПКИ ЗУМУ ВНИЗ ТА РОБИМО ПРОЗОРИМИ */
+.leaflet-control-zoom {
+    position: fixed !important;
+    bottom: 180px !important; 
+    /* Ставимо такий самий відступ, як у нижньої панелі */
+    left: 10px !important; 
+    top: auto !important;
+    
+    /* ПРИБИРАЄМО ЗАЙВІ ВІДСТУПИ */
+    margin: 0 !important; 
+    
+    opacity: 0.65;
+    z-index: 999;
 }
 
-/* Для мобілок можна опустити ще нижче, якщо треба */
-@media (max-width: 767px) {
-    .leaflet-top.leaflet-left {
-        top: 100px !important;
+/* Також треба прибрати відступ у самого контейнера бару */
+.leaflet-left .leaflet-control {
+    margin-left: 0 !important;
+}
+
+/* При наведенні стають чіткими */
+.leaflet-control-zoom:hover {
+    opacity: 1;
+}
+
+/* Стиль самих кнопок */
+.leaflet-bar a {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    color: #444 !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+/* На ПК, де немає великої нижньої панелі, опускаємо їх нижче */
+@media (min-width: 768px) {
+    .leaflet-control-zoom {
+        bottom: 25px !important;
     }
 }
 
-/* ПРИМУСОВЕ ВИДАЛЕННЯ СТАНДАРТНОГО КОПІРАЙТУ */
-.leaflet-control-attribution {
-    display: none !important;
-}
-
-/* Змінюємо положення плашки ТІЛЬКИ для мобільних пристроїв */
-@media (max-width: 768px) {
+/* СТАТИСТИКА: ЗЛІВА ТА В САМОМУ ВЕРХУ */
+@media (max-width: 767px) {
     .stats-badge {
-        /* Скидаємо старі налаштування центрування */
+        position: fixed !important;
+        /* Повертаємо лівий край */
+        left: 10px !important; 
         right: auto !important;
-        left: 12px !important; /* ТЕПЕР ЗЛІВА, де кнопки + / - */
         transform: none !important;
         
-        /* Ставимо під кнопками масштабування */
-        top: 85px !important; 
+        /* Піднімаємо максимально вгору */
+        top: 50px !important; 
         
-        /* Компактний вигляд для мобілок */
-        font-size: 11px !important;
-        padding: 4px 8px !important;
+        width: max-content !important;
         background: rgba(0, 0, 0, 0.8) !important;
-        border-radius: 4px !important;
-        white-space: nowrap !important;
+        font-size: 11px !important;
+        padding: 4px 10px !important;
+        border-radius: 6px !important;
+        z-index: 2000 !important;
     }
 }
