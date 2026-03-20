@@ -93,15 +93,25 @@ const MY_ASSETS = {
 let lastUsedAngle = 0;
 let currentBeamDist = 9; // <--- ДОДАЙ ЦЕЙ РЯДОК
 
-function getBeamCoords(latlng, angle, type) {
-    // Зчитуємо актуальну дистанцію прямо з повзунка в момент розрахунку
+function getBeamCoords(latlng, angle, type, customDist) {
+    // 1. ПЕРЕВІРЯЄМО ПРІОРИТЕТ:
+    // Спочатку беремо customDist (який передається при сованні повзунка),
+    // якщо його нема — дивимось, який слайдер ЗАРАЗ ВИДИМИЙ на екрані.
+    
+    let distanceKm;
     const distSlider = document.getElementById('dist-slider');
     const distSliderMob = document.getElementById('dist-slider-mob');
+
+    if (customDist !== undefined) {
+        distanceKm = parseFloat(customDist);
+    } else {
+        // Перевіряємо, чи ми на мобільці (чи видима мобільна панель)
+        const isMobile = window.getComputedStyle(document.querySelector('.mobile-only')).display !== 'none';
+        const activeSlider = isMobile ? distSliderMob : distSlider;
+        distanceKm = parseFloat(activeSlider?.value || currentBeamDist);
+    }
     
-    // Беремо значення з того слайдера, який зараз активний/видимий
-    const distanceKm = parseFloat(distSlider?.value || distSliderMob?.value || currentBeamDist);
-    
-    let offsetKm = 0.05; // Мінімальний відступ, щоб лінія не "тикала" в центр іконки
+    let offsetKm = 0.05;
     const angleRad = ((-angle) + 90) * (Math.PI / 180);
 
     const startLat = latlng.lat + (offsetKm / 111.32) * Math.sin(angleRad);
@@ -206,13 +216,14 @@ function updateUI(angle) {
     if(s) {
         s.oninput = (e) => {
             const dist = e.target.value;
-            currentBeamDist = dist; // Оновлюємо глобальну змінну
-            
+            currentBeamDist = dist; // Оновлюємо глобальну змінну дистанції
+
+            // Оновлюємо цифри на екрані (і для ПК, і для мобілки)
             if(document.getElementById('dist-val')) document.getElementById('dist-val').innerText = dist;
             if(document.getElementById('dist-val-mob')) document.getElementById('dist-val-mob').innerText = dist;
 
             if (selectedMarker && selectedMarker.beam) {
-                // ПЕРЕМАЛЬОВУЄМО ЛІНІЮ В РЕАЛЬНОМУ ЧАСІ
+                // Перемальовуємо лінію в реальному часі
                 selectedMarker.beam.setLatLngs(
                     getBeamCoords(selectedMarker.getLatLng(), selectedMarker.angle, selectedMarker.type, dist)
                 );
