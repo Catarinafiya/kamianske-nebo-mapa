@@ -193,3 +193,8 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
         top: 100px !important;
     }
 }
+
+/* ПРИМУСОВЕ ВИДАЛЕННЯ СТАНДАРТНОГО КОПІРАЙТУ */
+.leaflet-control-attribution {
+    display: none !important;
+}
