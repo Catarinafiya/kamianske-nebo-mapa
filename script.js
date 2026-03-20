@@ -26,13 +26,13 @@ const googleMaps = L.tileLayer('http://{s}.google.com/vt/lyrs=m&hl=uk&x={x}&y={y
     attribution: '© Google Maps'
 });
 
-// Ініціалізація карти (залишаємо тільки Google)
+// Ініціалізація карти
 const map = L.map('map', {
     center: [48.45, 34.9],
     zoom: 8,
     layers: [googleMaps], 
     zoomControl: true,
-    attributionControl: false // <--- ЦЕ ВИМКНЕ ЗАЙВИЙ СИНІЙ НАПИС
+    attributionControl: false // <--- ДОДАЙ ЦЕЙ РЯДОК (не забудь кому вище)
 });
 
 
@@ -93,20 +93,20 @@ const MY_ASSETS = {
 let lastUsedAngle = 0;
 let currentBeamDist = 9; // <--- ДОДАЙ ЦЕЙ РЯДОК
 
-function getBeamCoords(latlng, angle, type, customDist) {
-    // Якщо дистанція не передана, беремо глобальну currentBeamDist
-    const distanceKm = parseFloat(customDist) || currentBeamDist; 
+function getBeamCoords(latlng, angle, type) {
+    // Зчитуємо актуальну дистанцію прямо з повзунка в момент розрахунку
+    const distSlider = document.getElementById('dist-slider');
+    const distSliderMob = document.getElementById('dist-slider-mob');
     
-    // Мінімальний відступ від центру іконки, щоб лінія не перекривала саму картинку
-    let offsetKm = (type === 'raketa') ? 0.05 : 0.05; 
-
+    // Беремо значення з того слайдера, який зараз активний/видимий
+    const distanceKm = parseFloat(distSlider?.value || distSliderMob?.value || currentBeamDist);
+    
+    let offsetKm = 0.05; // Мінімальний відступ, щоб лінія не "тикала" в центр іконки
     const angleRad = ((-angle) + 90) * (Math.PI / 180);
 
-    // Початок лінії (трохи відступаємо від центру іконки)
     const startLat = latlng.lat + (offsetKm / 111.32) * Math.sin(angleRad);
     const startLng = latlng.lng + (offsetKm / (111.32 * Math.cos(latlng.lat * Math.PI / 180))) * Math.cos(angleRad);
 
-    // Кінець лінії (рівно на відстань distanceKm)
     const destLat = latlng.lat + ((distanceKm + offsetKm) / 111.32) * Math.sin(angleRad);
     const destLng = latlng.lng + ((distanceKm + offsetKm) / (111.32 * Math.cos(latlng.lat * Math.PI / 180))) * Math.cos(angleRad);
 
@@ -167,10 +167,10 @@ map.on('click', (e) => {
         marker.beam = beam; // Прив'язуємо промінь до маркера
 
         // Рух променя разом з іконкою
-        marker.on('drag', function() {
-            // Передаємо і координати, і поточний кут, і ТИП цілі, і поточну ДИСТАНЦІЮ
-        this.beam.setLatLngs(getBeamCoords(this.getLatLng(), this.angle, this.type, currentBeamDist));
-        });
+       marker.on('drag', function() {
+    // Тепер промінь завжди знатиме, яка дистанція виставлена на екрані
+    this.beam.setLatLngs(getBeamCoords(this.getLatLng(), this.angle, this.type));
+});
 
         marker.on('click', (ev) => { 
             L.DomEvent.stopPropagation(ev); 
@@ -236,15 +236,13 @@ function deselect() {
             if (selectedMarker) {
                 const angle = e.target.value;
                 selectedMarker.angle = angle;
-                lastUsedAngle = angle; 
-                
+                lastUsedAngle = angle;
                 selectedMarker.setIcon(createIcon(selectedMarker.type, angle));
                 
-                // --- НОВЕ: Оновлюємо кут променя при повороті ---
                 if (selectedMarker.beam) {
-                    selectedMarker.beam.setLatLngs(getBeamCoords(selectedMarker.getLatLng(), angle));
+                    // Додаємо тип цілі в аргументи
+                    selectedMarker.beam.setLatLngs(getBeamCoords(selectedMarker.getLatLng(), angle, selectedMarker.type));
                 }
-                
                 updateUI(angle);
             }
         };
