@@ -198,3 +198,23 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
 .leaflet-control-attribution {
     display: none !important;
 }
+
+/* Змінюємо положення плашки ТІЛЬКИ для мобільних пристроїв */
+@media (max-width: 768px) {
+    .stats-badge {
+        /* Скидаємо старі налаштування центрування */
+        right: auto !important;
+        left: 12px !important; /* ТЕПЕР ЗЛІВА, де кнопки + / - */
+        transform: none !important;
+        
+        /* Ставимо під кнопками масштабування */
+        top: 85px !important; 
+        
+        /* Компактний вигляд для мобілок */
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+        background: rgba(0, 0, 0, 0.8) !important;
+        border-radius: 4px !important;
+        white-space: nowrap !important;
+    }
+}
