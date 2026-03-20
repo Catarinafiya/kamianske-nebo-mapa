@@ -193,7 +193,7 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
     /* ПРИБИРАЄМО ЗАЙВІ ВІДСТУПИ */
     margin: 0 !important; 
     
-    opacity: 0.65;
+    opacity: 1;
     z-index: 999;
 }
 
