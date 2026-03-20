@@ -94,14 +94,19 @@ let lastUsedAngle = 0;
 let currentBeamDist = 9; // <--- ДОДАЙ ЦЕЙ РЯДОК
 
 function getBeamCoords(latlng, angle, type, customDist) {
-    const distanceKm = parseFloat(customDist) || 9; 
-    let offsetKm = (type === 'raketa') ? 0.8 : (type === 'rozvid' ? 0.4 : 0.5);
+    // Якщо дистанція не передана, беремо глобальну currentBeamDist
+    const distanceKm = parseFloat(customDist) || currentBeamDist; 
+    
+    // Мінімальний відступ від центру іконки, щоб лінія не перекривала саму картинку
+    let offsetKm = (type === 'raketa') ? 0.05 : 0.05; 
 
     const angleRad = ((-angle) + 90) * (Math.PI / 180);
 
+    // Початок лінії (трохи відступаємо від центру іконки)
     const startLat = latlng.lat + (offsetKm / 111.32) * Math.sin(angleRad);
     const startLng = latlng.lng + (offsetKm / (111.32 * Math.cos(latlng.lat * Math.PI / 180))) * Math.cos(angleRad);
 
+    // Кінець лінії (рівно на відстань distanceKm)
     const destLat = latlng.lat + ((distanceKm + offsetKm) / 111.32) * Math.sin(angleRad);
     const destLng = latlng.lng + ((distanceKm + offsetKm) / (111.32 * Math.cos(latlng.lat * Math.PI / 180))) * Math.cos(angleRad);
 
@@ -163,7 +168,8 @@ map.on('click', (e) => {
 
         // Рух променя разом з іконкою
         marker.on('drag', function() {
-            this.beam.setLatLngs(getBeamCoords(this.getLatLng(), this.angle));
+            // Передаємо і координати, і поточний кут, і ТИП цілі, і поточну ДИСТАНЦІЮ
+        this.beam.setLatLngs(getBeamCoords(this.getLatLng(), this.angle, this.type, currentBeamDist));
         });
 
         marker.on('click', (ev) => { 
