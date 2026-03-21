@@ -293,7 +293,7 @@ function getNoun(number, one, two, five) {
     return five;
 }
 
-// 2. Оновлена функція статистики з грамотним текстом
+// 2. Оновлена функція статистики (ПРАВИЛЬНИЙ ПОРЯДОК ТА БЕЗ РОЗРИВІВ)
 function updateStats() {
     const total = allMarkers.length;
     
@@ -303,32 +303,37 @@ function updateStats() {
 
     // Відмінюємо головне слово "ціль"
     const totalWord = getNoun(total, 'ціль', 'цілі', 'цілей');
-    let text = `<strong>Всього: ${total} ${totalWord}</strong>`;
+    
+    // Обгортаємо першу частину, щоб "Всього: 10 цілей" теж ніколи не розривалося
+    let text = `<span style="white-space: nowrap;"><strong>Всього:&nbsp;${total}&nbsp;${totalWord}</strong></span>`;
     
     let details = [];
     
-    if (shaheds > 0) {
-        const word = getNoun(shaheds, 'Шахед', 'Шахеди', 'Шахедів');
-        details.push(`${shaheds} ${word}`);
-    }
-    
+    // 1. РАКЕТИ (Тепер вони перші, як на кнопках)
     if (missiles > 0) {
         const word = getNoun(missiles, 'Ракета', 'Ракети', 'Ракет');
-        details.push(`${missiles} ${word}`);
+        // &nbsp; і nowrap склеюють цифру і слово
+        details.push(`<span style="white-space: nowrap;">${missiles}&nbsp;${word}</span>`);
     }
     
+    // 2. ШАХЕДИ (Другі)
+    if (shaheds > 0) {
+        const word = getNoun(shaheds, 'Шахед', 'Шахеди', 'Шахедів');
+        details.push(`<span style="white-space: nowrap;">${shaheds}&nbsp;${word}</span>`);
+    }
+    
+    // 3. РОЗВІДНИКИ (Треті)
     if (recons > 0) {
         const word = getNoun(recons, 'Розвідник', 'Розвідники', 'Розвідників');
-        details.push(`${recons} ${word}`);
+        details.push(`<span style="white-space: nowrap;">${recons}&nbsp;${word}</span>`);
     }
     
     if (details.length > 0) {
-        // Додаємо розділювач "|"
         text += ` | ${details.join(' | ')}`;
     }
 
     const badge = document.getElementById('stats-badge');
     if (badge) {
-        badge.innerHTML = text; // Використовуємо innerHTML для жирного шрифту
+        badge.innerHTML = text; 
     }
 }
