@@ -166,20 +166,23 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
 }
 
 
-/* ВОТЕРМАРКА (НЕЗМІННА СІТКА) */
+/* ВОТЕРМАРКА: ТВІЙ КОД З ЛОГІКОЮ РЕФЕРЕНСУ */
 .watermark-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 500; /* Лежить над картою, але під кнопками інтерфейсу */
-    pointer-events: none; /* Крізь цей шар можна клікати на карту */
-    opacity: 0.10; /* Налаштуй видимість під себе (0.1 - блідо, 0.3 - яскраво) */
+    z-index: 500; /* підняв z-index як у них, щоб точно була над картою */
+    pointer-events: none;
+    opacity: 0.10;
+
+    /* Використовуємо 250x120 та групу <g> з референсу */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='120'><g transform='rotate(-30 125 60)' opacity='0.75'><text x='125' y='60' font-family='Arial' font-size='26' text-anchor='middle' dominant-baseline='middle' fill='black'>kamianske_nebo</text></g></svg>");
     
-    /* Створюємо патерн за допомогою SVG */
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='120'><text x='50%' y='50%' font-size='26' font-family='Arial' fill='black' text-anchor='middle' transform='rotate(-30, 125, 125)'>kamianske_nebo</text></svg>");
     background-repeat: repeat;
+    background-position: center;
+    /* background-size: 250px 120px; — якщо слова здадуться малими, розкоментуй це */
 }
 
 /* ПЕРЕНОСИМО КНОПКИ ЗУМУ ВНИЗ ТА РОБИМО ПРОЗОРИМИ */
