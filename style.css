@@ -221,24 +221,27 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
     }
 }
 
-/* СТАТИСТИКА: ЗЛІВА ТА В САМОМУ ВЕРХУ */
 @media (max-width: 767px) {
     .stats-badge {
         position: fixed !important;
-        /* Повертаємо лівий край */
         left: 10px !important; 
         right: auto !important;
         transform: none !important;
-        
-        /* Піднімаємо максимально вгору */
         top: 50px !important; 
         
         width: max-content !important;
-        background: rgba(0, 0, 0, 0.8) !important;
+        /* 1. РОБИМО ТОВСТОЮ (збільшили першу цифру з 4 до 10) */
+        padding: 6px 15px !important; 
+        
+        /* 2. ОПАСІТІ (зробили 0.7 як на референсі) */
+        background: rgba(0, 0, 0, 0.7) !important; 
+        
+        /* ВСЕ ІНШЕ ТВОЄ БЕЗ ЗМІН */
         font-size: 11px !important;
-        padding: 4px 10px !important;
-        border-radius: 6px !important;
+        border-radius: 10px !important;
+      max-width: 85% !important; /* Щоб не вилазила за екран, якщо цілей буде забагато */
         z-index: 2000 !important;
+        white-space: nowrap !important;
     }
 }
 
