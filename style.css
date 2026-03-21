@@ -224,24 +224,35 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
 @media (max-width: 767px) {
     .stats-badge {
         position: fixed !important;
+        /* Твоє ідеальне розташування */
         left: 10px !important; 
+        top: 50px !important; 
         right: auto !important;
         transform: none !important;
-        top: 50px !important; 
+
+        /* ПАРАМЕТРИ З РЕФЕРЕНСУ */
+        background: rgba(0, 0, 0, 0.75) !important; /* Точний #000000BF */
+        padding: 8px 12px !important;               /* Точні відступи */
+        border-radius: 10px !important;             /* Акуратне закруглення */
         
+        /* ТЕКСТ З РЕФЕРЕНСУ */
+        color: #ffffff !important;
+        font-size: 14px !important;                 /* Точний розмір */
+        font-family: system-ui, -apple-system, sans-serif !important;
+        font-weight: 500 !important;
+        line-height: 1.4 !important;                /* Щоб плашка була "пухкою" */
+        
+        /* ГЕОМЕТРІЯ ТА ВИРІВНЮВАННЯ */
+        display: block !important;
+        align-items: center !important;
         width: max-content !important;
-        /* 1. РОБИМО ТОВСТОЮ (збільшили першу цифру з 4 до 10) */
-        padding: 6px 15px !important; 
-        
-        /* 2. ОПАСІТІ (зробили 0.7 як на референсі) */
-        background: rgba(0, 0, 0, 0.7) !important; 
-        
-        /* ВСЕ ІНШЕ ТВОЄ БЕЗ ЗМІН */
-        font-size: 11px !important;
-        border-radius: 10px !important;
-      max-width: 85% !important; /* Щоб не вилазила за екран, якщо цілей буде забагато */
+        max-width: 88% !important;
+        white-space: normal !important;
         z-index: 2000 !important;
-        white-space: nowrap !important;
+
+        
+        /* Додаємо легку тінь для об'єму */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
     }
 }
 
