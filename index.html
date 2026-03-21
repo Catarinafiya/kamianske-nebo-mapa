@@ -18,7 +18,6 @@
 <body>
 
 
-
 <div id="map"></div>
 
 <div class="watermark-overlay"></div>
@@ -36,8 +35,8 @@
 <div class="controls pc-only">
     <div class="title">Цілі</div>
     <div class="buttons-grid">
-        <button class="tool-btn" data-tool="shahed">🛸 БпЛА</button>
-        <button class="tool-btn" data-tool="raketa">🚀 Ракета</button>
+        <button class="tool-btn" data-tool="shahed">🚀 Ракета</button>
+        <button class="tool-btn" data-tool="raketa">🛸 БпЛА</button>
         <button class="tool-btn" data-tool="rozvid">🕵️‍♂️ Розвідник</button>
     </div>
     
@@ -80,12 +79,26 @@
             <button class="delete-btn-mob" onclick="deleteSelected()" style="background:none; border:none; font-size: 20px;">❌</button>
         </div>
     </div> <div class="mobile-buttons">
-        <button class="tool-btn" data-tool="shahed">🛸</button>
         <button class="tool-btn" data-tool="raketa">🚀</button>
+        <button class="tool-btn" data-tool="shahed">🛸</button>
         <button class="tool-btn" data-tool="rozvid">🕵️‍♂️</button>
         <button class="clear-all-mob" onclick="clearAll()">🗑️</button>
     </div>
 </div>
+
+<script>
+  // Блокуємо праву кнопку миші
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // Блокуємо клавіші (F12, Ctrl+U, Ctrl+Shift+I)
+  document.onkeydown = function(e) {
+    if (e.keyCode == 123 || 
+        (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || 
+        (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+      return false;
+    }
+  };
+</script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
