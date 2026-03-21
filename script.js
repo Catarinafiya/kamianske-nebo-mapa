@@ -91,7 +91,7 @@ const MY_ASSETS = {
 
 // Змінна для збереження останнього обраного курсу
 let lastUsedAngle = 0;
-let currentBeamDist = 9; // <--- ДОДАЙ ЦЕЙ РЯДОК
+let currentBeamDist = 1; // <--- ДОДАЙ ЦЕЙ РЯДОК
 
 function getBeamCoords(latlng, angle, type, customDist) {
     // 1. ПЕРЕВІРЯЄМО ПРІОРИТЕТ:
@@ -167,8 +167,9 @@ map.on('click', (e) => {
         // --- НОВЕ: Створюємо червоний пунктирний промінь ---
         const beam = L.polyline(getBeamCoords(e.latlng, startAngle, currentTool, currentBeamDist), {
     color: 'red',
-    weight: 2,
-    dashArray: '5, 10', 
+    weight: 1.5,       /* Ставимо дробове значення, це спрацює */
+    dashArray: '2, 6', /* Робимо риску коротшою, а пропуски частішими */
+    opacity: 0.7,      /* Додаємо прозорість, це візуально "полегшить" лінію */
     interactive: false
 }).addTo(map);
 
