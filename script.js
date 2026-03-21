@@ -235,10 +235,12 @@ function updateUI(angle) {
 
 function deselect() {
     selectedMarker = null;
-    const panel = document.getElementById('course-panel');
-    const panelMob = document.getElementById('course-panel-mob');
-    if(panel) panel.style.display = 'none';
-    if(panelMob) panelMob.style.display = 'none';
+    
+    // ПРОСТО ВИДАЛИ АБО ЗАКОМЕНТУЙ ЦІ РЯДКИ:
+    // const panel = document.getElementById('course-panel');
+    // const panelMob = document.getElementById('course-panel-mob');
+    // if(panel) panel.style.display = 'none';
+    // if(panelMob) panelMob.style.display = 'none';
 }
 
 // Поворот (слайдери) - тепер повертають і промінь
