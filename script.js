@@ -31,7 +31,7 @@ const map = L.map('map', {
     center: [48.45, 34.9],
     zoom: 8,
     layers: [googleMaps], 
-    zoomControl: true,
+    zoomControl: false,
     attributionControl: false // <--- ДОДАЙ ЦЕЙ РЯДОК (не забудь кому вище)
 });
 
