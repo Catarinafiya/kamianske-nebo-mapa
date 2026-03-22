@@ -348,7 +348,9 @@ function updateStats() {
 // =============================================
 function adjustPanelsLayout() {
     const screenWidth = window.innerWidth;
-    const targetDistance = Math.floor(screenWidth * 4 / 5); // 4/5 ширини
+   // Варіант 2 — з мінімальним/максимальним обмеженням (рекомендую)
+const targetDistance = Math.max(180, Math.min(480, Math.round(screenWidth * 1.25)));
+//    ↑ найменша відстань     ↑ найбільша відстань
 
     const statsBadge = document.getElementById('stats-badge');
     if (!statsBadge) return;
