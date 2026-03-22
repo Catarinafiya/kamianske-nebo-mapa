@@ -175,7 +175,7 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
     height: 100vh;
     z-index: 500; /* підняв z-index як у них, щоб точно була над картою */
     pointer-events: none;
-    opacity: 0.10;
+    opacity: 0.20;
 
     /* Використовуємо 250x120 та групу <g> з референсу */
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='120'><g transform='rotate(-30 125 60)' opacity='0.75'><text x='125' y='60' font-family='Arial' font-size='26' text-anchor='middle' dominant-baseline='middle' fill='black'>kamianske_nebo</text></g></svg>");
