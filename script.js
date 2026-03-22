@@ -339,3 +339,14 @@ function updateStats() {
         badge.innerHTML = text; 
     }
 }
+
+
+// Тільки для iOS — намагається змусити Safari сховати панелі на початку
+if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            window.scrollTo(0, 1);
+            setTimeout(function() { window.scrollTo(0, 0); }, 100);
+        }, 500);
+    });
+}
