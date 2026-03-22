@@ -168,21 +168,20 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
 
 /* ВОТЕРМАРКА: ТВІЙ КОД З ЛОГІКОЮ РЕФЕРЕНСУ */
 .watermark-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 500; /* підняв z-index як у них, щоб точно була над картою */
-    pointer-events: none;
-    opacity: 0.10;
+    position: fixed; 
+    inset: 0; 
+    pointer-events: none; 
+    z-index: 500; /* Ставимо 500, щоб не перекривало кнопки, але було над картою */
 
-    /* Використовуємо 250x120 та групу <g> з референсу */
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='250' height='120'><g transform='rotate(-30 125 60)' opacity='0.75'><text x='125' y='60' font-family='Arial' font-size='26' text-anchor='middle' dominant-baseline='middle' fill='black'>kamianske_nebo</text></g></svg>");
-    
-    background-repeat: repeat;
-    background-position: center;
-    /* background-size: 250px 120px; — якщо слова здадуться малими, розкоментуй це */
+    /* ВІДКОРИГОВАНО: шрифт 28 + bold, щоб довге слово влізло в 250px */
+    background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27250%27%20height%3D%27120%27%3E%0A%20%20%3Cg%20opacity%3D%270.75%27%20transform%3D%27rotate%28-30%20125%2060%29%27%3E%0A%20%20%20%20%3Ctext%20x%3D%27125%27%20y%3D%2760%27%20font-family%3D%27Arial%27%20font-size%3D%2728%27%20font-weight%3D%27bold%27%20text-anchor%3D%27middle%27%20dominant-baseline%3D%27middle%27%20fill%3D%27black%27%3Ekamianske_nebo%3C/text%3E%0A%20%20%3C/g%3E%0A%3C/svg%3E");
+
+    background-repeat: repeat; 
+    background-position: center; 
+    background-size: 250px 120px;
+
+    mix-blend-mode: normal; 
+    opacity: 0.10;
 }
 
 
