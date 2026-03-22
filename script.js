@@ -343,91 +343,93 @@ function updateStats() {
 
 
 // =============================================
-// ДИНАМІЧНА ВІДСТАНЬ: верх повзунків → верх статистики = 4/5 ширини екрану
+// ДИНАМІЧНА ВІДСТАНЬ: верх нижньої панелі → верх статистики ≈ 4/5 ширини
+// Враховує address bar / navigation bar на мобілках
 // =============================================
 function adjustStatsPosition() {
-    if (window.innerWidth >= 768) return; // ПК лишаємо як є
+    if (window.innerWidth >= 768) return; // ПК — без змін
 
     const stats = document.getElementById('stats-badge');
     if (!stats) return;
 
-    // ────────────────────────────────────────────────
-    // 1. Отримуємо "реальну" висоту видимої області (враховує панель браузера)
-    // ────────────────────────────────────────────────
-    let viewportHeight = window.innerHeight;
-    let viewportTop    = 0;
+    // 1. Отримуємо стабільну висоту видимої області (visual viewport кращий)
+    let visHeight = window.innerHeight;
+    let visOffsetTop = 0;
 
     if (window.visualViewport) {
-        viewportHeight = window.visualViewport.height;
-        viewportTop    = window.visualViewport.offsetTop; // іноді важливий на iOS
+        visHeight    = window.visualViewport.height;
+        visOffsetTop = window.visualViewport.offsetTop || 0;
     }
 
-    // ────────────────────────────────────────────────
-    // 2. Бажана відстань — 4/5 ширини екрану
-    // ────────────────────────────────────────────────
-    const screenWidth  = window.innerWidth;               // ширина стабільна
-    const desiredGap   = Math.round(screenWidth * 4 / 5); // твої 4:5 вертикально
+    // 2. Бажана відстань (4/5 ширини — твоя пропорція)
+    const screenWidth = window.innerWidth;
+    const desiredGap  = Math.round(screenWidth * 4 / 5); // ≈ 0.8 × ширина
 
-    // ────────────────────────────────────────────────
-    // 3. Нижній референс (верх повзунків або кнопок)
-    // ────────────────────────────────────────────────
-    const slidersPanel = document.getElementById('course-panel-mob');
-    const buttonsBar   = document.querySelector('.mobile-buttons');
+    // 3. Верх нижньої панелі (повзунки або кнопки)
+    const sliders = document.getElementById('course-panel-mob');
+    const buttons = document.querySelector('.mobile-buttons');
 
-    let referenceTopPx = viewportHeight; // дефолт — низ видимої області
+    let refTop = visHeight; // дефолт — низ видимої області
 
-    if (slidersPanel && window.getComputedStyle(slidersPanel).display !== 'none') {
-        const rect = slidersPanel.getBoundingClientRect();
-        referenceTopPx = rect.top + viewportTop; // коригуємо на offset якщо є
-    } else if (buttonsBar) {
-        const rect = buttonsBar.getBoundingClientRect();
-        referenceTopPx = rect.top + viewportTop;
+    let refElement = null;
+    if (sliders && window.getComputedStyle(sliders).display !== 'none') {
+        refElement = sliders;
+    } else if (buttons) {
+        refElement = buttons;
     }
 
-    // ────────────────────────────────────────────────
+    if (refElement) {
+        const rect = refElement.getBoundingClientRect();
+        refTop = rect.top + visOffsetTop; // коригуємо на visual offset
+    }
+
     // 4. Новий top для статистики
-    // ────────────────────────────────────────────────
-    let newTop = referenceTopPx - desiredGap;
+    let targetTop = refTop - desiredGap - 10; // -10 — маленький відступ, щоб не прилипало
 
-    // Обмеження: не вище 20px від верху, не нижче ~40% екрану
-    newTop = Math.max(20, Math.min(newTop, viewportHeight * 0.40));
+    // Обмеження: не вище 30px від верху екрану, не нижче 35% висоти
+    targetTop = Math.max(30, Math.min(targetTop, visHeight * 0.35));
 
-    // ────────────────────────────────────────────────
-    // 5. Застосовуємо
-    // ────────────────────────────────────────────────
-    stats.style.position   = 'fixed';
-    stats.style.top        = `${newTop}px`;
-    stats.style.left       = '10px';
-    stats.style.right      = 'auto';
-    stats.style.transform  = 'none';
+    // 5. Застосовуємо з !important-стилем
+    stats.style.setProperty('position', 'fixed', 'important');
+    stats.style.setProperty('top', `${targetTop}px`, 'important');
+    stats.style.setProperty('left', '10px', 'important');
+    stats.style.setProperty('right', 'auto', 'important');
+    stats.style.setProperty('transform', 'none', 'important');
 }
 
 // =============================================
-// Коли викликати
+// Слухачі подій — викликаємо часто
 // =============================================
 
-// Важливо: visualViewport змінюється при скролі, фокусі, появі/зникненні панелі
+// visualViewport — головний для мобілок (скрол, поява клавіатури, hide/show bar)
 if (window.visualViewport) {
     window.visualViewport.addEventListener('resize', adjustStatsPosition);
     window.visualViewport.addEventListener('scroll',  adjustStatsPosition);
 }
 
-// Звичайні події (на всяк випадок)
+// Звичайні події
 window.addEventListener('resize', adjustStatsPosition);
 window.addEventListener('orientationchange', adjustStatsPosition);
 
-// Виклик при зміні стану панелі повзунків
-const originalSelect = selectMarker;
+// Коли змінюється стан панелі повзунків
+const origSelect = selectMarker;
 selectMarker = function(marker) {
-    originalSelect.call(this, marker);
-    setTimeout(adjustStatsPosition, 60);   // даємо браузеру оновити visualViewport
+    origSelect.call(this, marker);
+    setTimeout(adjustStatsPosition, 80);   // затримка для DOM + visualViewport
 };
 
-const originalDeselect = deselect;
+const origDeselect = deselect;
 deselect = function() {
-    originalDeselect.call(this);
-    setTimeout(adjustStatsPosition, 60);
+    origDeselect.call(this);
+    setTimeout(adjustStatsPosition, 80);
 };
 
-// Початковий виклик
-window.addEventListener('load', () => setTimeout(adjustStatsPosition, 400));
+// Початковий виклик з затримкою (щоб усе встигло намалюватись)
+window.addEventListener('load', () => {
+    setTimeout(adjustStatsPosition, 500);
+    // Додатковий виклик через 2 секунди — на випадок lazy-load барів
+    setTimeout(adjustStatsPosition, 2000);
+});
+
+// На клік по карті — теж перерахунок
+map.on('click', () => setTimeout(adjustStatsPosition, 150));
