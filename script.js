@@ -339,3 +339,77 @@ function updateStats() {
         badge.innerHTML = text; 
     }
 }
+
+
+
+// =============================================
+// ДИНАМІЧНИЙ LAYOUT — точно твоя ідея
+// відстань між top(sliders) і top(stats) = 4/5 ширини екрана
+// =============================================
+function adjustPanelsLayout() {
+    const screenWidth = window.innerWidth;
+    const targetDistance = Math.floor(screenWidth * 4 / 5); // 4/5 ширини
+
+    const statsBadge = document.getElementById('stats-badge');
+    if (!statsBadge) return;
+
+    const isMobile = screenWidth < 768;
+
+    if (!isMobile) {
+        // ПК — залишаємо як було (праворуч від панелі)
+        statsBadge.style.setProperty('top', '20px', 'important');
+        statsBadge.style.setProperty('left', '220px', 'important');
+        statsBadge.style.setProperty('transform', 'none', 'important');
+        return;
+    }
+
+    // === МОБІЛЬНА ЛОГІКА ===
+    const mobCourse = document.getElementById('course-panel-mob');
+    const mobButtons = document.querySelector('.mobile-buttons');
+    let slidersTop = window.innerHeight - 80; // дефолт (кнопки внизу)
+
+    if (mobCourse && window.getComputedStyle(mobCourse).display !== 'none') {
+        // якщо повзунки видимі — беремо їх реальний top
+        slidersTop = mobCourse.getBoundingClientRect().top;
+    } else if (mobButtons) {
+        // якщо повзунків немає — беремо top кнопок
+        slidersTop = mobButtons.getBoundingClientRect().top;
+    }
+
+    // Обчислюємо top для stats
+    let newStatsTop = slidersTop - targetDistance;
+
+    // Захист від виходу за екран
+    newStatsTop = Math.max(10, Math.min(newStatsTop, window.innerHeight * 0.35));
+
+    // Встановлюємо з !important (перебиває всі медіа-запити)
+    statsBadge.style.setProperty('top', `${newStatsTop}px`, 'important');
+    statsBadge.style.setProperty('left', '10px', 'important');
+    statsBadge.style.setProperty('transform', 'none', 'important');
+}
+
+// =============================================
+// Підключаємо в потрібні місця
+// =============================================
+
+// 1. При зміні розміру екрана / повороті телефону
+window.addEventListener('resize', adjustPanelsLayout);
+window.addEventListener('orientationchange', adjustPanelsLayout);
+
+// 2. При появі/зникненні панелі повзунків
+const originalSelectMarker = selectMarker;
+selectMarker = function(marker) {
+    originalSelectMarker(marker);
+    adjustPanelsLayout();           // ← оновлюємо відстань
+};
+
+const originalDeselect = deselect;
+deselect = function() {
+    originalDeselect();
+    adjustPanelsLayout();           // ← оновлюємо відстань
+};
+
+// 3. Ініціалізація при завантаженні
+window.addEventListener('load', () => {
+    adjustPanelsLayout();
+});
