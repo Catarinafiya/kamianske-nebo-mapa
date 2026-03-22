@@ -185,45 +185,6 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
     /* background-size: 250px 120px; — якщо слова здадуться малими, розкоментуй це */
 }
 
-/* ПЕРЕНОСИМО КНОПКИ ЗУМУ ВНИЗ ТА РОБИМО ПРОЗОРИМИ */
-.leaflet-control-zoom {
-    position: fixed !important;
-    bottom: 180px !important; 
-    /* Ставимо такий самий відступ, як у нижньої панелі */
-    left: 10px !important; 
-    top: auto !important;
-    
-    /* ПРИБИРАЄМО ЗАЙВІ ВІДСТУПИ */
-    margin: 0 !important; 
-    
-    opacity: 1;
-    z-index: 999;
-}
-
-/* Також треба прибрати відступ у самого контейнера бару */
-.leaflet-left .leaflet-control {
-    margin-left: 0 !important;
-}
-
-/* При наведенні стають чіткими */
-.leaflet-control-zoom:hover {
-    opacity: 1;
-}
-
-/* Стиль самих кнопок */
-.leaflet-bar a {
-    background-color: rgba(255, 255, 255, 0.7) !important;
-    color: #444 !important;
-    border: 1px solid rgba(0,0,0,0.1) !important;
-}
-
-/* На ПК, де немає великої нижньої панелі, опускаємо їх нижче */
-@media (min-width: 768px) {
-    .leaflet-control-zoom {
-        bottom: 25px !important;
-    }
-}
-
 
 /* Постійно повертатись сюди*/
 @media (max-width: 767px) {
