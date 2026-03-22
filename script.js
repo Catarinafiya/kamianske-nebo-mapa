@@ -343,75 +343,91 @@ function updateStats() {
 
 
 // =============================================
-// ДИНАМІЧНИЙ LAYOUT — точно твоя ідея
-// відстань між top(sliders) і top(stats) = 4/5 ширини екрана
+// ДИНАМІЧНА ВІДСТАНЬ: верх повзунків → верх статистики = 4/5 ширини екрану
 // =============================================
-function adjustPanelsLayout() {
-    const screenWidth = window.innerWidth;
-   // Варіант 2 — з мінімальним/максимальним обмеженням (рекомендую)
-const targetDistance = Math.max(180, Math.min(480, Math.round(screenWidth * 1.25)));
-//    ↑ найменша відстань     ↑ найбільша відстань
+function adjustStatsPosition() {
+    if (window.innerWidth >= 768) return; // ПК лишаємо як є
 
-    const statsBadge = document.getElementById('stats-badge');
-    if (!statsBadge) return;
+    const stats = document.getElementById('stats-badge');
+    if (!stats) return;
 
-    const isMobile = screenWidth < 768;
+    // ────────────────────────────────────────────────
+    // 1. Отримуємо "реальну" висоту видимої області (враховує панель браузера)
+    // ────────────────────────────────────────────────
+    let viewportHeight = window.innerHeight;
+    let viewportTop    = 0;
 
-    if (!isMobile) {
-        // ПК — залишаємо як було (праворуч від панелі)
-        statsBadge.style.setProperty('top', '20px', 'important');
-        statsBadge.style.setProperty('left', '220px', 'important');
-        statsBadge.style.setProperty('transform', 'none', 'important');
-        return;
+    if (window.visualViewport) {
+        viewportHeight = window.visualViewport.height;
+        viewportTop    = window.visualViewport.offsetTop; // іноді важливий на iOS
     }
 
-    // === МОБІЛЬНА ЛОГІКА ===
-    const mobCourse = document.getElementById('course-panel-mob');
-    const mobButtons = document.querySelector('.mobile-buttons');
-    let slidersTop = window.innerHeight - 80; // дефолт (кнопки внизу)
+    // ────────────────────────────────────────────────
+    // 2. Бажана відстань — 4/5 ширини екрану
+    // ────────────────────────────────────────────────
+    const screenWidth  = window.innerWidth;               // ширина стабільна
+    const desiredGap   = Math.round(screenWidth * 4 / 5); // твої 4:5 вертикально
 
-    if (mobCourse && window.getComputedStyle(mobCourse).display !== 'none') {
-        // якщо повзунки видимі — беремо їх реальний top
-        slidersTop = mobCourse.getBoundingClientRect().top;
-    } else if (mobButtons) {
-        // якщо повзунків немає — беремо top кнопок
-        slidersTop = mobButtons.getBoundingClientRect().top;
+    // ────────────────────────────────────────────────
+    // 3. Нижній референс (верх повзунків або кнопок)
+    // ────────────────────────────────────────────────
+    const slidersPanel = document.getElementById('course-panel-mob');
+    const buttonsBar   = document.querySelector('.mobile-buttons');
+
+    let referenceTopPx = viewportHeight; // дефолт — низ видимої області
+
+    if (slidersPanel && window.getComputedStyle(slidersPanel).display !== 'none') {
+        const rect = slidersPanel.getBoundingClientRect();
+        referenceTopPx = rect.top + viewportTop; // коригуємо на offset якщо є
+    } else if (buttonsBar) {
+        const rect = buttonsBar.getBoundingClientRect();
+        referenceTopPx = rect.top + viewportTop;
     }
 
-    // Обчислюємо top для stats
-    let newStatsTop = slidersTop - targetDistance;
+    // ────────────────────────────────────────────────
+    // 4. Новий top для статистики
+    // ────────────────────────────────────────────────
+    let newTop = referenceTopPx - desiredGap;
 
-    // Захист від виходу за екран
-    newStatsTop = Math.max(10, Math.min(newStatsTop, window.innerHeight * 0.35));
+    // Обмеження: не вище 20px від верху, не нижче ~40% екрану
+    newTop = Math.max(20, Math.min(newTop, viewportHeight * 0.40));
 
-    // Встановлюємо з !important (перебиває всі медіа-запити)
-    statsBadge.style.setProperty('top', `${newStatsTop}px`, 'important');
-    statsBadge.style.setProperty('left', '10px', 'important');
-    statsBadge.style.setProperty('transform', 'none', 'important');
+    // ────────────────────────────────────────────────
+    // 5. Застосовуємо
+    // ────────────────────────────────────────────────
+    stats.style.position   = 'fixed';
+    stats.style.top        = `${newTop}px`;
+    stats.style.left       = '10px';
+    stats.style.right      = 'auto';
+    stats.style.transform  = 'none';
 }
 
 // =============================================
-// Підключаємо в потрібні місця
+// Коли викликати
 // =============================================
 
-// 1. При зміні розміру екрана / повороті телефону
-window.addEventListener('resize', adjustPanelsLayout);
-window.addEventListener('orientationchange', adjustPanelsLayout);
+// Важливо: visualViewport змінюється при скролі, фокусі, появі/зникненні панелі
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', adjustStatsPosition);
+    window.visualViewport.addEventListener('scroll',  adjustStatsPosition);
+}
 
-// 2. При появі/зникненні панелі повзунків
-const originalSelectMarker = selectMarker;
+// Звичайні події (на всяк випадок)
+window.addEventListener('resize', adjustStatsPosition);
+window.addEventListener('orientationchange', adjustStatsPosition);
+
+// Виклик при зміні стану панелі повзунків
+const originalSelect = selectMarker;
 selectMarker = function(marker) {
-    originalSelectMarker(marker);
-    adjustPanelsLayout();           // ← оновлюємо відстань
+    originalSelect.call(this, marker);
+    setTimeout(adjustStatsPosition, 60);   // даємо браузеру оновити visualViewport
 };
 
 const originalDeselect = deselect;
 deselect = function() {
-    originalDeselect();
-    adjustPanelsLayout();           // ← оновлюємо відстань
+    originalDeselect.call(this);
+    setTimeout(adjustStatsPosition, 60);
 };
 
-// 3. Ініціалізація при завантаженні
-window.addEventListener('load', () => {
-    adjustPanelsLayout();
-});
+// Початковий виклик
+window.addEventListener('load', () => setTimeout(adjustStatsPosition, 400));
