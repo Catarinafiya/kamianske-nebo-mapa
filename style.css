@@ -1,20 +1,10 @@
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100dvh;                  /* динамічна висота — краща для iOS */
-    min-height: -webkit-fill-available;  /* fallback для старих iOS */
-    overflow-y: auto;                /* дозволь скрол body (ключовий рядок!) */
-    -webkit-overflow-scrolling: touch;  /* плавний скрол на iOS */
-    font-family: sans-serif;
-}
+body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: sans-serif; }
 
-#map {
-    height: 100dvh;
-    width: 100vw;
-    position: absolute;              /* або fixed */
-    top: 0;
-    left: 0;
-    background: #1a1a1a;
+/* ВИПРАВЛЕНО: прибрано z-index, що перекривав кнопки зуму */
+#map { 
+    height: 100vh; 
+    width: 100vw; 
+    background: #1a1a1a; 
 }
 
 /* Стиль для пунктиру, щоб він не зливався */
@@ -53,7 +43,7 @@ body, html {
 /* МОБІЛЬНА ПАНЕЛЬ — ОНОВЛЕНО (КОМПАКТНА) */
 .mobile-controls { 
     position: fixed; 
-    bottom: calc(20px + env(safe-area-inset-bottom, 20px)); 
+    bottom: 20px; 
     left: 10px; 
     right: 10px; 
     z-index: 1000; 
