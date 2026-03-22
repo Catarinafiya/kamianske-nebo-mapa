@@ -101,25 +101,24 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
 @media (max-width: 767px) { .pc-only { display: none !important; } }
 
 /* Стилі для мобільної версії статистики */
+/* 
 @media (max-width: 767px) {
     .stats-badge {
         left: 50%;
         transform: translateX(-50%);
         top: 10px;
-        
-        /* ОСЬ ТУТ ГОЛОВНІ ЗМІНИ */
-        width: max-content;    /* Стискатися під розмір тексту */
-        max-width: 90%;        /* Але не ширше ніж 90% екрану */
-        min-width: 120px;      /* Щоб не була занадто маленькою */
-        
-        white-space: nowrap;  /* Дозволяємо перенос, якщо тексту дуже багато */
+        width: max-content;
+        max-width: 90%;
+        min-width: 120px;
+        white-space: nowrap;
         text-align: center;
         font-size: 12px;
         padding: 6px 15px;
         line-height: 1.4;
-        display: block;        /* Гарантуємо правильне центрування */
+        display: block;
     }
 }
+*/
 
 /* --- ПЛАШКА КОПІРАЙТУ (ФІНАЛЬНА ВЕРСІЯ ЗА РЕФЕРЕНСОМ) --- */
 .custom-copyright {
@@ -226,6 +225,7 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
 
 
 /* Постійно повертатись сюди*/
+/* ЗАЛИШ тільки це (або закоментуй весь блок, якщо хочеш чистіше) */
 @media (max-width: 767px) {
     .stats-badge {
         /* видали або закоментуй ці рядки */
@@ -234,7 +234,6 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
         /* transform: none !important; */
         /* right: auto !important; */
 
-        /* а це залиш */
         background: rgba(0, 0, 0, 0.75) !important;
         padding: 8px 12px !important;
         border-radius: 10px !important;
@@ -254,6 +253,3 @@ body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family:
 .leaflet-control-zoom {
     display: none !important;
 }
-
-
-
