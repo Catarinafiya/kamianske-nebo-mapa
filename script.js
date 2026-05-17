@@ -42,13 +42,13 @@ const regionCoords = OBLAST_DATA.features[0].geometry.coordinates[0][0].map(c =>
 
 L.polygon([worldCoords, regionCoords], {
     fillColor: 'black',
-    fillOpacity: 0.2,
+    fillOpacity: 0.6,
     color: '#ffd11a',
-    weight: 3,
+    weight: 4,
     interactive: false
 }).addTo(map);
 
-L.polyline(regionCoords, { color: '#1b91c8', weight: 1 }).addTo(map);
+L.polyline(regionCoords, { color: '#ffd11a', weight: 1 }).addTo(map);
 
 // Функція для оновлення статистики
 function updateStats() {
