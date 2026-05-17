@@ -43,7 +43,7 @@ const regionCoords = OBLAST_DATA.features[0].geometry.coordinates[0][0].map(c =>
 L.polygon([worldCoords, regionCoords], {
     fillColor: 'black',
     fillOpacity: 0.4,
-    color: '#006600',
+    color: '#ffcc00',
     weight: 3,
     interactive: false
 }).addTo(map);
